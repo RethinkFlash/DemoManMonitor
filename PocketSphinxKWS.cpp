@@ -42,7 +42,8 @@ std::string PocketSphinxKWS::process(std::vector<uint8_t>& buffer) {
 	ps_process_raw(_ps, (short*)buffer.data(), buffer.size()/2, FALSE, FALSE);
 	// Check if a keyword was spotted.
 	int score = 0;
-	const char* uttid;
+	//const char* uttid;
+	// above is unused variable with new changes
 	const char* hyp = ps_get_hyp(_ps, &score);
 	if (hyp != NULL) {
 		// Found a keyword, reset the utterance and return the keyword.
