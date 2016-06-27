@@ -31,7 +31,7 @@ void PocketSphinxKWS::initialize(cmd_ln_t* config, const std::string& keywordFil
 		throw runtime_error("Call to ps_set_search failed.");
 	}
 	// Start expecting the first utterance.
-	ps_start_utt(_ps, NULL);
+	ps_start_utt(_ps);
 }
 
 std::string PocketSphinxKWS::process(std::vector<uint8_t>& buffer) {
@@ -43,13 +43,13 @@ std::string PocketSphinxKWS::process(std::vector<uint8_t>& buffer) {
 	// Check if a keyword was spotted.
 	int score = 0;
 	const char* uttid;
-	const char* hyp = ps_get_hyp(_ps, &score, &uttid);
+	const char* hyp = ps_get_hyp(_ps, &score);
 	if (hyp != NULL) {
 		// Found a keyword, reset the utterance and return the keyword.
 		// First copy hypothesis to a string because it will be cleared by starting a new utterance.
 		string keyword(hyp);
 		ps_end_utt(_ps);
-		ps_start_utt(_ps, NULL);
+		ps_start_utt(_ps);
 		return keyword;
 	}
 	// No keyword spotted.
