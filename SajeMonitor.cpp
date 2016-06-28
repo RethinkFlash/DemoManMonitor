@@ -59,7 +59,6 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	// Since the Pi only has one core and timing is somewhat
 	// critical (for smooth audio playback), a tight loop to
 	// update audio and ticket printing state will be executed.
-	size_t step = 0;
 	_audioSink->resume();
 	_audioSink->playAsync(*_alarm);
 	bool playing = true;
