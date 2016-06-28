@@ -20,7 +20,6 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
-	_ticketSteps(),
 	_quietMode(false),
 	_light(light)
 {}
@@ -64,13 +63,7 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	_audioSink->resume();
 	_audioSink->playAsync(*_alarm);
 	bool playing = true;
-	while (playing || step < _ticketSteps.size()) {
-		// Check if the printer is ready for a new command.
-		if (step < _ticketSteps.size() && _printer->ready()) {
-			// Execute the current step and increment to the next one.
-			_ticketSteps[step](_printer);
-			step++;
-		}
+	while (playing) {
 		playing = _audioSink->asyncUpdate();
 	}
 	// Stop audio playback.
