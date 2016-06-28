@@ -1,4 +1,4 @@
-OUTPUT = DemoManMonitor
+OUTPUT = SajeMonitor
 CXX = g++-4.7
 CXX_FLAGS = -std=c++11 -Wall -Werror
 PROJECT_DIR = .
