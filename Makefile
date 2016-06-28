@@ -5,18 +5,18 @@ PROJECT_DIR = .
 TESTS_DIR = $(PROJECT_DIR)/tests
 GTEST_DIR = $(PROJECT_DIR)/gtest-1.7.0
 MODELS_DIR = $(PROJECT_DIR)/models
-SOURCES = DemoManMonitor.cpp AlsaSource.cpp AlsaSink.cpp PocketSphinxKWS.cpp Adafruit_Thermal.cpp
-TEST_SOURCES = $(TESTS_DIR)/test_DemoManMonitor.cpp $(TESTS_DIR)/test_Adafruit_Thermal.cpp
+SOURCES = SajeMonitor.cpp AlsaSource.cpp AlsaSink.cpp PocketSphinxKWS.cpp
+TEST_SOURCES = $(TESTS_DIR)/test_SajeMonitor.cpp
 LIBS = -lwiringPi -lpocketsphinx -lsphinxbase -lsphinxad -lasound
 INCLUDES = -I/usr/local/include/sphinxbase -I/usr/local/include/pocketsphinx
 TEST_INCLUDES = -I$(PROJECT_DIR) -isystem $(GTEST_DIR)/include -I$(GTEST_DIR)
 
 
-DemoManMonitor: $(SOURCES) main.cpp
+SajeMonitor: $(SOURCES) main.cpp
 	$(CXX) $(CXX_FLAGS) $(INCLUDES) $(SOURCES) main.cpp -o $(OUTPUT) $(LIBS)
 
-run: DemoManMonitor
-	./DemoManMonitor -hmm $(MODELS_DIR)/hub4wsj_sc_8k/ -dict $(MODELS_DIR)/cmu07a.dic -lm $(MODELS_DIR)/wsj0vp.5000.DMP
+run: SajeMonitor
+	./SajeMonitor -hmm $(MODELS_DIR)/hub4wsj_sc_8k/ -dict $(MODELS_DIR)/cmu07a.dic -lm $(MODELS_DIR)/wsj0vp.5000.DMP
 
 runtests: tests
 	./testrunner
@@ -30,9 +30,6 @@ AlsaSourceRecorder: $(SOURCES)
 AlsaSinkPlayer: $(SOURCES)
 	$(CXX) $(CXX_FLAGS) $(TEST_INCLUDES) $(INCLUDES) $(SOURCES) ./tests/AlsaSinkPlayer.cpp -o AlsaSinkPlayer $(LIBS)
 
-AdafruitThermalTest: $(SOURCES)
-	$(CXX) $(CXX_FLAGS) $(TEST_INCLUDES) $(INCLUDES) $(SOURCES) ./tests/AdafruitThermalTest.cpp -o AdafruitThermalTest $(LIBS)
-
 gtest-all.o:
 	$(CXX) $(CXX_FLAGS) $(TEST_INCLUDES) -pthread -c $(GTEST_DIR)/src/gtest-all.cc
 
@@ -45,4 +42,3 @@ clean:
 	rm -f testrunner
 	rm -f AlsaSourceRecorder
 	rm -f AlsaSinkPlayer
-	rm -f AdafruitThermalTest

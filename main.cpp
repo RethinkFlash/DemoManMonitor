@@ -15,11 +15,12 @@
 
 #include <wiringPi.h>
 
-#include "Adafruit_Thermal.h"
+
 #include "AlsaError.h"
 #include "AlsaSink.h"
 #include "AlsaSource.h"
-#include "DemoManMonitor.h"
+// #include "DemoManMonitor.h"
+#include "SajeMonitor.h"
 #include "PocketSphinxKWS.h"
 
 using namespace std;
@@ -30,11 +31,11 @@ using namespace std;
 #define KEYWORD_FILE	"keywords.txt"
 #define PRINTER_PORT	"/dev/ttyAMA0"
 #define QUIET_PIN		0
-#define LED_PIN			4
+#define SERVO_PIN	    4
 
 bool shouldRun = true;
 
-void setQuietMode(DemoManMonitor& monitor, bool quietMode) {
+void setQuietMode(SajeMonitor& monitor, bool quietMode) {
 	monitor.setQuietMode(quietMode);
 	if (quietMode) {
 		cout << "Quiet mode enabled." << endl;
@@ -45,7 +46,7 @@ void setQuietMode(DemoManMonitor& monitor, bool quietMode) {
 }
 
 void light(bool enable) {
-	digitalWrite(LED_PIN, enable ? HIGH : LOW);
+	digitalWrite(SERVO_PIN, enable ? HIGH : LOW);
 }
 
 int main(int argc, char* argv[]) {
@@ -61,12 +62,12 @@ int main(int argc, char* argv[]) {
 		pinMode(QUIET_PIN, INPUT);
 		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
 
-		pinMode(LED_PIN, OUTPUT);
-		digitalWrite(LED_PIN, LOW);
+		pinMode(SERVO_PIN, OUTPUT);
+		digitalWrite(SERVO_PIN, LOW);
 
 		// Initialize printer.
-		Adafruit_Thermal printer(PRINTER_PORT);
-		printer.begin();
+		// Adafruit_Thermal printer(PRINTER_PORT);
+		// printer.begin();
 
 		// Load alarm raw audio.
 		ifstream input(ALARM_FILE, ios::in | ios::binary);
@@ -87,7 +88,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		DemoManMonitor monitor(8000, &printer, &source, &sink, &spotter, &alarm, light);
+		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, light);
 		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
@@ -103,7 +104,7 @@ int main(int argc, char* argv[]) {
 			monitor.update();
 		}
 
-		digitalWrite(LED_PIN, LOW);
+		digitalWrite(SERVO_PIN, LOW);
 	}
 	catch (AlsaError ex) {
 		cerr << "ALSA ERROR " << ex.message << " (" << ex.code << ") while calling: " << ex.what() << endl;
