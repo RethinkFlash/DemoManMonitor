@@ -56,7 +56,7 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     /*****
     put in code to write message over serial
     *****/
-    serialPuts(_arduinoSerial,'1');
+    serialPutchar(_arduinoSerial,'1');
 
 	// Stop audio recording while the alarm is raised.
 	_audioSource->pause();
