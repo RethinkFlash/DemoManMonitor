@@ -14,12 +14,12 @@
 #include <vector>
 
 #include <wiringPi.h>
+#include <wiringSerial.h>
 
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
 #include "AlsaSource.h"
-// #include "DemoManMonitor.h"
 #include "SajeMonitor.h"
 #include "PocketSphinxKWS.h"
 
@@ -29,11 +29,13 @@ using namespace std;
 #define RECORD_HW		"plughw:1,0"
 #define PLAYBACK_HW		"plughw:0,0"
 #define KEYWORD_FILE	"keywords.txt"
-#define PRINTER_PORT	"/dev/ttyAMA0"
-#define QUIET_PIN		0
-#define SERVO_PIN	    4
+
+#define ARDUINO_PORT	"/dev/ttyUSB0"
+#define BAUD_RATE       9600
+#define QUIET_PIN       0
 
 bool shouldRun = true;
+int ser;
 
 void setQuietMode(SajeMonitor& monitor, bool quietMode) {
 	monitor.setQuietMode(quietMode);
@@ -43,10 +45,6 @@ void setQuietMode(SajeMonitor& monitor, bool quietMode) {
 	else {
 		cout << "Quiet mode disabled." << endl;
 	}
-}
-
-void servo(bool enable) {
-	digitalWrite(SERVO_PIN, enable ? HIGH : LOW);
 }
 
 int main(int argc, char* argv[]) {
@@ -62,12 +60,15 @@ int main(int argc, char* argv[]) {
 		pinMode(QUIET_PIN, INPUT);
 		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
 
-		pinMode(SERVO_PIN, OUTPUT);
-		digitalWrite(SERVO_PIN, LOW);
-
-		// Initialize printer.
-		// Adafruit_Thermal printer(PRINTER_PORT);
-		// printer.begin();
+        if((fd = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
+            cerr << "ERROR: Arduino Serial cannot be opened" << endl;
+            if ( wiringPiSetup () < 0 ) {
+                cerr << "WiringPiSetup problem" << endl;
+            }
+    		return 1;
+        } else {
+            cout << "Arduino Serial successful!" << endl;
+        }
 
 		// Load alarm raw audio.
 		ifstream input(ALARM_FILE, ios::in | ios::binary);
@@ -88,7 +89,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, servo);
+		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm);
 		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
@@ -103,8 +104,6 @@ int main(int argc, char* argv[]) {
 			// Update main logic state.
 			monitor.update();
 		}
-
-		digitalWrite(SERVO_PIN, LOW);
 	}
 	catch (AlsaError ex) {
 		cerr << "ALSA ERROR " << ex.message << " (" << ex.code << ") while calling: " << ex.what() << endl;

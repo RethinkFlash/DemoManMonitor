@@ -13,15 +13,13 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSource* audioSource,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
-							   std::vector<uint8_t>* alarm,
-							   std::function<void(bool enable)> servo):
+							   std::vector<uint8_t>* alarm:
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
-	_quietMode(false),
-	_servo(servo)
+	_quietMode(false)
 {}
 
 SajeMonitor::~SajeMonitor()
@@ -51,8 +49,11 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	if (_quietMode) {
 		return;
 	}
-	// Turn the servo on.
-	_servo(true);
+
+    /*****
+    put in code to write message over serial
+    *****/
+
 	// Stop audio recording while the alarm is raised.
 	_audioSource->pause();
 	// Play audio and print the ticket at the same time.
@@ -69,8 +70,6 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	_audioSink->pause();
 	// Enable recording again.
 	_audioSource->resume();
-	// Turn the servo off.
-	_servo(false);
 }
 
 void SajeMonitor::setQuietMode(bool quietMode) {

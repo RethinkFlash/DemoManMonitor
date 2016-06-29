@@ -22,8 +22,7 @@ public:
 				   AudioSource* audioSource,
 				   AudioSink* audioSink,
 				   KeywordSpotter* spotter,
-				   std::vector<uint8_t>* alarm,
-				   std::function<void(bool enable)> servo);
+				   std::vector<uint8_t>* alarm);
 	~SajeMonitor();
 	void update();
 	void setQuietMode(bool quietMode);
@@ -37,6 +36,4 @@ private:
 	std::vector<uint8_t>* _alarm;
 	std::vector<uint8_t> _buffer;
 	bool _quietMode;
-	std::function<void(bool enable)> _servo;
-
 };
