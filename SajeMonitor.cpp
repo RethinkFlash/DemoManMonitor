@@ -14,14 +14,14 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
 							   std::vector<uint8_t>* alarm,
-							   std::function<void(bool enable)> light):
+							   std::function<void(bool enable)> servo):
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
 	_quietMode(false),
-	_light(light)
+	_servo(servo)
 {}
 
 SajeMonitor::~SajeMonitor()
@@ -51,8 +51,8 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	if (_quietMode) {
 		return;
 	}
-	// Turn the light on.
-	_light(true);
+	// Turn the servo on.
+	_servo(true);
 	// Stop audio recording while the alarm is raised.
 	_audioSource->pause();
 	// Play audio and print the ticket at the same time.
@@ -69,8 +69,8 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	_audioSink->pause();
 	// Enable recording again.
 	_audioSource->resume();
-	// Turn the light off.
-	_light(false);
+	// Turn the servo off.
+	_servo(false);
 }
 
 void SajeMonitor::setQuietMode(bool quietMode) {

@@ -45,7 +45,7 @@ void setQuietMode(SajeMonitor& monitor, bool quietMode) {
 	}
 }
 
-void light(bool enable) {
+void servo(bool enable) {
 	digitalWrite(SERVO_PIN, enable ? HIGH : LOW);
 }
 
@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, light);
+		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, servo);
 		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
