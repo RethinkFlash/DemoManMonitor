@@ -13,7 +13,7 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSource* audioSource,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
-							   std::vector<uint8_t>* alarm:
+							   std::vector<uint8_t>* alarm):
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),

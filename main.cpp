@@ -35,7 +35,7 @@ using namespace std;
 #define QUIET_PIN       0
 
 bool shouldRun = true;
-int ser;
+int arduinoSerial;
 
 void setQuietMode(SajeMonitor& monitor, bool quietMode) {
 	monitor.setQuietMode(quietMode);
@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
 		pinMode(QUIET_PIN, INPUT);
 		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
 
-        if((fd = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
+        if((arduinoSerial = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
             cerr << "ERROR: Arduino Serial cannot be opened" << endl;
             if ( wiringPiSetup () < 0 ) {
                 cerr << "WiringPiSetup problem" << endl;
