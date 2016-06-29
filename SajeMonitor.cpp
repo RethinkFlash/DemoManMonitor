@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <unistd.h>
+#include <wiringSerial.h>
 
 using namespace std;
 
@@ -13,13 +14,15 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSource* audioSource,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
-							   std::vector<uint8_t>* alarm):
+							   std::vector<uint8_t>* alarm,
+                               int arduinoSerial):
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
-	_quietMode(false)
+	_quietMode(false),
+    _arduinoSerial(arduinoSerial)
 {}
 
 SajeMonitor::~SajeMonitor()
@@ -53,6 +56,7 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     /*****
     put in code to write message over serial
     *****/
+    serialPuts(_arduinoSerial,'1');
 
 	// Stop audio recording while the alarm is raised.
 	_audioSource->pause();

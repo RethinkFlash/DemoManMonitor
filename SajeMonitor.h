@@ -22,7 +22,8 @@ public:
 				   AudioSource* audioSource,
 				   AudioSink* audioSink,
 				   KeywordSpotter* spotter,
-				   std::vector<uint8_t>* alarm);
+				   std::vector<uint8_t>* alarm,
+			   	   int arduinoSerial);
 	~SajeMonitor();
 	void update();
 	void setQuietMode(bool quietMode);

@@ -36,6 +36,7 @@ using namespace std;
 
 bool shouldRun = true;
 int arduinoSerial;
+int wiringPiSetupInt;
 
 void setQuietMode(SajeMonitor& monitor, bool quietMode) {
 	monitor.setQuietMode(quietMode);
@@ -56,13 +57,13 @@ int main(int argc, char* argv[]) {
 		signal(SIGINT, [](int param){ shouldRun = false; });
 
 		// Initialize wiringPi library and quiet switch input.
-		wiringPiSetup () ;
+		wiringPiSetupInt = wiringPiSetup () ;
 		pinMode(QUIET_PIN, INPUT);
 		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
 
         if((arduinoSerial = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
             cerr << "ERROR: Arduino Serial cannot be opened" << endl;
-            if ( wiringPiSetup () < 0 ) {
+            if ( wiringPiSetupInt < 0 ) {
                 cerr << "WiringPiSetup problem" << endl;
             }
     		return 1;
@@ -89,7 +90,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm);
+		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, arduinoSerial);
 		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
@@ -115,4 +116,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	return 0;
+}
+
+void exiting() {
+    cerr << "Ending session " << endl;
+    serialFlush(arduinoSerial);
+    serialClose(arduinoSerial);
+    cerr << "Arduino Serial Closed " << endl;
 }
