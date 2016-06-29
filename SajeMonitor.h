@@ -37,4 +37,5 @@ private:
 	std::vector<uint8_t>* _alarm;
 	std::vector<uint8_t> _buffer;
 	bool _quietMode;
+	int _arduinoSerial;
 };
