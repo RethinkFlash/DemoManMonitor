@@ -14,7 +14,6 @@
 #include <vector>
 
 #include <wiringPi.h>
-#include <osftPwm.h>
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
@@ -31,13 +30,14 @@ using namespace std;
 
 // #define ARDUINO_PORT	"/dev/ttyUSB0"
 // #define BAUD_RATE       9600
-#define SERVO_PIN 		0
-#define PWM_PIN 		1
 
 bool shouldRun = true;
 int wiringPiSetupInt;
+int HARD_PWM_PIN = 1;
+int DELAY_MS = 1000;
 
 int main(int argc, char* argv[]) {
+
 	try {
 		cout << "Demolition Man Verbal Morality Statute Monitor" << endl;
 		cout << "Loading..." << endl;
@@ -49,19 +49,46 @@ int main(int argc, char* argv[]) {
 		if (wiringPiSetup () == -1)
 			exit (1) ;
 
-		pinMode(1, PWM_OUTPUT);
-		pwmSetMode(PWM_MODE_MS);
-		pwmSetClock(384); //clock at 50kHz (20us tick)
-		pwmSetRange(1000); //range at 1000 ticks (20ms)
-		pwmWrite(1, 75);  //theretically 50 (1ms) to 100 (2ms) on my servo 30-130 works ok
-		cout << "Servo written" << endl;
-		delay (3000);
+
+		pinMode(HARD_PWM_PIN, PWM_OUTPUT);
+		
+		int up;
+		int down;
+
+		for(up = 1017; up <= 1024; up++) {
+			pwmWrite(HARD_PWM_PIN, up);
+			cout << up << endl;
+			delay(DELAY_MS);
+		}
+
+		delay(DELAY_MS * 2);
+		for(down = up; down >= 1017; down--) {
+			pwmWrite(HARD_PWM_PIN, down);
+			cout << down << endl;
+			delay(DELAY_MS * 2);
+		}
+		delay(DELAY_MS * 2);
+		cout << "finished" << endl;
+
+		//pinMode(1, PWM_OUTPUT);
+		//pwmSetMode(PWM_MODE_MS);
+		//pwmSetClock(384); //clock at 50kHz (20us tick)
+		//pwmSetRange(1000); //range at 1000 ticks (20ms)
+		//pwmWrite(1, 50);  //theretically 50 (1ms) to 100 (2ms) on my servo 30-130 works ok
+		//cout << "50" << endl;
+		//delay(1000);
+		//pwmWrite( 1, 75);
+		//cout << "75" << endl;
+		//delay(1000);
+		//pwmWrite( 1, 100);
+		//cout << "100" << endl;
+		//delay(1000);
 		// digitalWrite(SERVO_PIN, LOW);
 		//
 		// softPwmCreate(SERVO_PIN, 0, 200);
 		// softPwmWrite(SERVO_PIN, 180);
 
-		cout << "Servo done" << endl;
+		//cout << "Servo done" << endl;
 
 		// // Load alarm raw audio.
 		// ifstream input(ALARM_FILE, ios::in | ios::binary);
@@ -106,7 +133,9 @@ int main(int argc, char* argv[]) {
 
 void exiting() {
     cerr << "Ending session " << endl;
+	pwmWrite(HARD_PWM_PIN, 0);
+	delay(100);
+	exit(0);
     // serialFlush(arduinoSerial);
     // serialClose(arduinoSerial);
-    cerr << " " << endl;
 }
