@@ -11,7 +11,7 @@
 using namespace std;
 
 int DELAY_MS = 750;
-int MIN_VAL = 20;
+int MIN_VAL = 25;
 int MAX_VAL = 125;
 
 SajeMonitor::SajeMonitor(size_t bufferSize,
