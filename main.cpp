@@ -34,7 +34,7 @@ using namespace std;
 bool shouldRun = true;
 int wiringPiSetupInt;
 int HARD_PWM_PIN = 1;
-int DELAY_MS = 1000;
+int DELAY_MS = 750;
 
 int main(int argc, char* argv[]) {
 
@@ -51,18 +51,21 @@ int main(int argc, char* argv[]) {
 
 
 		pinMode(HARD_PWM_PIN, PWM_OUTPUT);
+		pwmSetMode(PWM_MODE_MS);
+		pwmSetClock(384);
+		pwmSetRange(1000);
 		
 		int up;
 		int down;
 
-		for(up = 1017; up <= 1024; up++) {
+		for(up = 20; up <= 125; up++) {
 			pwmWrite(HARD_PWM_PIN, up);
 			cout << up << endl;
 			delay(DELAY_MS);
 		}
 
 		delay(DELAY_MS * 2);
-		for(down = up; down >= 1017; down--) {
+		for(down = up; down >= 20; down--) {
 			pwmWrite(HARD_PWM_PIN, down);
 			cout << down << endl;
 			delay(DELAY_MS * 2);
