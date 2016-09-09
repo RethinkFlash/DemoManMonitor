@@ -16,15 +16,15 @@
 #include "AudioSource.h"
 #include "KeywordSpotter.h"
 
-class SajeMonitor {
+class EscentsMonitor {
 public:
-	SajeMonitor(size_t bufferSize,
+	EscentsMonitor(size_t bufferSize,
 				   AudioSource* audioSource,
 				   AudioSink* audioSink,
 				   KeywordSpotter* spotter,
 				   std::vector<uint8_t>* alarm,
 			   	   int servoPin);
-	~SajeMonitor();
+	~EscentsMonitor();
 	void update();
     int pwmWire;
 

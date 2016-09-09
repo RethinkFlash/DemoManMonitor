@@ -2,7 +2,7 @@
 // Created by Tony DiCola (tony@tonydicola.com)
 // Released under an MIT license (http://opensource.org/licenses/MIT).
 
-#include "SajeMonitor.h"
+#include "EscentsMonitor.h"
 
 #include <iostream>
 #include <unistd.h>
@@ -14,7 +14,7 @@ int DELAY_MS = 750;
 int MIN_VAL = 25;
 int MAX_VAL = 125;
 
-SajeMonitor::SajeMonitor(size_t bufferSize,
+EscentsMonitor::EscentsMonitor(size_t bufferSize,
 							   AudioSource* audioSource,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
@@ -38,10 +38,10 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
     pwmSetRange(1000);
 }
 
-SajeMonitor::~SajeMonitor()
+EscentsMonitor::~EscentsMonitor()
 {}
 
-void SajeMonitor::update() {
+void EscentsMonitor::update() {
 	// Grab a buffer of audio.
 	if (_audioSource->record(_buffer)) {
 		// Look for a keyword.
@@ -60,7 +60,7 @@ void SajeMonitor::update() {
 }
 
 
-void SajeMonitor::raiseAlarm(const std::string& keyword) {
+void EscentsMonitor::raiseAlarm(const std::string& keyword) {
 
     // Stop audio recording while the alarm is raised.
 	_audioSource->pause();

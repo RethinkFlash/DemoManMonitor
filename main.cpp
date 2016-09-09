@@ -17,7 +17,7 @@
 #include "AlsaError.h"
 #include "AlsaSink.h"
 #include "AlsaSource.h"
-#include "SajeMonitor.h"
+#include "EscentsMonitor.h"
 #include "PocketSphinxKWS.h"
 
 using namespace std;
@@ -36,7 +36,7 @@ int HARD_PWM_PIN = 1;
 int main(int argc, char* argv[]) {
 
 	try {
-		cout << "Demolition Man Verbal Morality Statute Monitor" << endl;
+		// cout << "Demolition Man Verbal Morality Statute Monitor" << endl;
 		cout << "Loading..." << endl;
 
 		// Signal handler to catch ctrl-c in the main loop and shut down gracefully (i.e. call destructors).
@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, HARD_PWM_PIN);
+		EscentsMonitor monitor(8000, &source, &sink, &spotter, &alarm, HARD_PWM_PIN);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
 
