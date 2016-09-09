@@ -32,6 +32,7 @@ using namespace std;
 
 bool shouldRun = true;
 int HARD_PWM_PIN = 1;
+int READY_LED_PIN = 2;
 
 int main(int argc, char* argv[]) {
 
@@ -61,7 +62,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		EscentsMonitor monitor(8000, &source, &sink, &spotter, &alarm, HARD_PWM_PIN);
+		EscentsMonitor monitor(8000, &source, &sink, &spotter, &alarm, HARD_PWM_PIN, READY_LED_PIN);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
 
@@ -86,6 +87,7 @@ int main(int argc, char* argv[]) {
 void exiting() {
     cerr << "Ending session " << endl;
 	pwmWrite(HARD_PWM_PIN, 0);
+        digitalWrite(READY_LED_PIN, LOW);
 	delay(100);
 	exit(0);
     // serialFlush(arduinoSerial);

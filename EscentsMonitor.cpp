@@ -11,21 +11,23 @@
 using namespace std;
 
 int DELAY_MS = 750;
-int MIN_VAL = 25;
-int MAX_VAL = 125;
+int MAX_VAL = 25;
+int MIN_VAL = 125;
 
 EscentsMonitor::EscentsMonitor(size_t bufferSize,
 							   AudioSource* audioSource,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
 							   std::vector<uint8_t>* alarm,
-                               int servoPin):
+                               				   int servoPin,
+							   int readyLedPin):
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
-    _servoPin(servoPin)
+    _servoPin(servoPin),
+    _readyLedPin(readyLedPin)
 {
     // Initialize wiringPi library.
     if (wiringPiSetup () == -1)
@@ -36,6 +38,9 @@ EscentsMonitor::EscentsMonitor(size_t bufferSize,
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(384);
     pwmSetRange(1000);
+
+    pinMode(_readyLedPin, OUTPUT);
+    digitalWrite(_readyLedPin, HIGH);
 }
 
 EscentsMonitor::~EscentsMonitor()
@@ -72,12 +77,18 @@ void EscentsMonitor::raiseAlarm(const std::string& keyword) {
     6.5 is good for mid
     11.5 is good for max
     *****/
+   
+    // turn off the led first
+    digitalWrite(_readyLedPin, LOW);    
 
     pwmWrite(_servoPin, MAX_VAL);
     delay(2000);
     pwmWrite(_servoPin, MIN_VAL);
     delay(1000);
     pwmWrite(_servoPin, 0);
+
+    // turn led back on
+    digitalWrite(_readyLedPin, HIGH);
 
     cout << "done with servo" << endl;
 

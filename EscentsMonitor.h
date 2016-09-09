@@ -23,7 +23,8 @@ public:
 				   AudioSink* audioSink,
 				   KeywordSpotter* spotter,
 				   std::vector<uint8_t>* alarm,
-			   	   int servoPin);
+			   	   int servoPin,
+				   int readyLedPin);
 	~EscentsMonitor();
 	void update();
     int pwmWire;
@@ -38,4 +39,5 @@ private:
 	std::vector<uint8_t> _buffer;
 	int _arduinoSerial;
     int _servoPin;
+    int _readyLedPin;
 };
