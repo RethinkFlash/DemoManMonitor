@@ -27,6 +27,7 @@ public:
 	~SajeMonitor();
 	void update();
 	void setQuietMode(bool quietMode);
+    int pwmWire;
 
 private:
 	void raiseAlarm(const std::string& keyword);

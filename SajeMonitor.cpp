@@ -6,7 +6,8 @@
 
 #include <iostream>
 #include <unistd.h>
-#include <wiringSerial.h>
+#include <wiringPi.h>
+#include <softPwm.h>
 
 using namespace std;
 
@@ -15,18 +16,20 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
 							   std::vector<uint8_t>* alarm,
-                               int arduinoSerial):
+                               int servoPwm):
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
 	_quietMode(false),
-    _arduinoSerial(arduinoSerial)
+    _servoPin(servoPwm)
 {}
 
 SajeMonitor::~SajeMonitor()
-{}
+{
+    softPwmCreate(_servoPin, 0, 50);
+}
 
 void SajeMonitor::update() {
 	// Grab a buffer of audio.
@@ -54,9 +57,17 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	}
 
     /*****
-    put in code to write message over serial
+    put in code to set pwm for servo
+    from the python test, these pwm values where good
+    2 is good for min
+    6.5 is good for mid
+    11.5 is good for max
     *****/
-    serialPutchar(_arduinoSerial,'1');
+    softPwmWrite(_servoPin, 6.5);
+    delay(2000);
+    softPwmWrite(_servoPin, 2);
+    delay(1000);
+    softPwmWrite(_servoPin, 0);
 
 	// Stop audio recording while the alarm is raised.
 	_audioSource->pause();

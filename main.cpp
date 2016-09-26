@@ -14,8 +14,7 @@
 #include <vector>
 
 #include <wiringPi.h>
-#include <wiringSerial.h>
-
+#include <softPwm.h>
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
@@ -30,8 +29,8 @@ using namespace std;
 #define PLAYBACK_HW		"plughw:0,0"
 #define KEYWORD_FILE	"keywords.txt"
 
-#define ARDUINO_PORT	"/dev/ttyUSB0"
-#define BAUD_RATE       9600
+// #define ARDUINO_PORT	"/dev/ttyUSB0"
+// #define BAUD_RATE       9600
 #define QUIET_PIN       0
 
 bool shouldRun = true;
@@ -57,19 +56,19 @@ int main(int argc, char* argv[]) {
 		signal(SIGINT, [](int param){ shouldRun = false; });
 
 		// Initialize wiringPi library and quiet switch input.
-		wiringPiSetupInt = wiringPiSetup () ;
+		wiringPiSetupInt = wiringPiSetupPhys() ;
 		pinMode(QUIET_PIN, INPUT);
 		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
 
-        if((arduinoSerial = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
-            cerr << "ERROR: Arduino Serial cannot be opened" << endl;
-            if ( wiringPiSetupInt < 0 ) {
-                cerr << "WiringPiSetup problem" << endl;
-            }
-    		return 1;
-        } else {
-            cout << "Arduino Serial successful!" << endl;
-        }
+        // if((arduinoSerial = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
+        //     cerr << "ERROR: Arduino Serial cannot be opened" << endl;
+        //     if ( wiringPiSetupInt < 0 ) {
+        //         cerr << "WiringPiSetup problem" << endl;
+        //     }
+    	// 	return 1;
+        // } else {
+        //     cout << "Arduino Serial successful!" << endl;
+        // }
 
 		// Load alarm raw audio.
 		ifstream input(ALARM_FILE, ios::in | ios::binary);
@@ -90,7 +89,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, arduinoSerial);
+		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, 12);
 		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;

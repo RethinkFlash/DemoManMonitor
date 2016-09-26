@@ -7,7 +7,7 @@ GTEST_DIR = $(PROJECT_DIR)/gtest-1.7.0
 MODELS_DIR = $(PROJECT_DIR)/models
 SOURCES = SajeMonitor.cpp AlsaSource.cpp AlsaSink.cpp PocketSphinxKWS.cpp
 TEST_SOURCES = $(TESTS_DIR)/test_SajeMonitor.cpp
-LIBS = -lwiringPi -lpocketsphinx -lsphinxbase -lsphinxad -lasound
+LIBS = -lwiringPi -lpocketsphinx -lsphinxbase -lsphinxad -lasound -lpthread
 INCLUDES = -I/usr/local/include/sphinxbase -I/usr/local/include/pocketsphinx
 TEST_INCLUDES = -I$(PROJECT_DIR) -isystem $(GTEST_DIR)/include -I$(GTEST_DIR)
 
