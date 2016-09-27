@@ -14,7 +14,7 @@
 #include <vector>
 
 #include <wiringPi.h>
-#include <softServo.h>
+#include "softServo.h"
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
