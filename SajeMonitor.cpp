@@ -23,13 +23,13 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 	_alarm(alarm),
 	_buffer(bufferSize),
     _servoPin(servoPwm)
-{}
-
-SajeMonitor::~SajeMonitor()
 {
     cout << "Setting up PWM channel" << endl;
     pinMode(_servoPin, PWM_OUTPUT);
 }
+
+SajeMonitor::~SajeMonitor()
+{}
 
 void SajeMonitor::update() {
 	// Grab a buffer of audio.
