@@ -84,14 +84,14 @@ int main(int argc, char* argv[]) {
 		// 	monitor.update();
 		// }
 	}
-	// catch (AlsaError ex) {
-	// 	cerr << "ALSA ERROR " << ex.message << " (" << ex.code << ") while calling: " << ex.what() << endl;
-	// 	return 1;
-	// }
-	// catch (exception ex) {
-	// 	cerr << "ERROR: " << ex.what() << endl;
-	// 	return 1;
-	// }
+	catch (AlsaError ex) {
+		cerr << "ALSA ERROR " << ex.message << " (" << ex.code << ") while calling: " << ex.what() << endl;
+		return 1;
+	}
+	catch (exception ex) {
+		cerr << "ERROR: " << ex.what() << endl;
+		return 1;
+	}
 
 	return 0;
 }
