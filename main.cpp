@@ -32,7 +32,7 @@ using namespace std;
 // #define ARDUINO_PORT	"/dev/ttyUSB0"
 // #define BAUD_RATE       9600
 #define QUIET_PIN       0
-#define SERVO_PIN 		18
+#define SERVO_PIN 		17
 
 bool shouldRun = true;
 int arduinoSerial;
