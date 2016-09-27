@@ -23,7 +23,7 @@ public:
 				   AudioSink* audioSink,
 				   KeywordSpotter* spotter,
 				   std::vector<uint8_t>* alarm,
-			   	   int arduinoSerial);
+			   	   int servoPin);
 	~SajeMonitor();
 	void update();
 	void setQuietMode(bool quietMode);
@@ -39,4 +39,5 @@ private:
 	std::vector<uint8_t> _buffer;
 	bool _quietMode;
 	int _arduinoSerial;
+    int _servoPin;
 };

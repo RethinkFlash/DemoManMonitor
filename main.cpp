@@ -119,7 +119,7 @@ int main(int argc, char* argv[]) {
 
 void exiting() {
     cerr << "Ending session " << endl;
-    serialFlush(arduinoSerial);
-    serialClose(arduinoSerial);
-    cerr << "Arduino Serial Closed " << endl;
+    // serialFlush(arduinoSerial);
+    // serialClose(arduinoSerial);
+    cerr << " " << endl;
 }
