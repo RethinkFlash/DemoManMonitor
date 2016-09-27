@@ -32,6 +32,7 @@ using namespace std;
 // #define ARDUINO_PORT	"/dev/ttyUSB0"
 // #define BAUD_RATE       9600
 #define QUIET_PIN       0
+#define SERVO_PIN 		18
 
 bool shouldRun = true;
 int arduinoSerial;
@@ -56,7 +57,7 @@ int main(int argc, char* argv[]) {
 		signal(SIGINT, [](int param){ shouldRun = false; });
 
 		// Initialize wiringPi library and quiet switch input.
-		wiringPiSetupInt = wiringPiSetupPhys() ;
+		wiringPiSetupInt = wiringPiSetupGpio() ;
 		pinMode(QUIET_PIN, INPUT);
 		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
 
@@ -89,7 +90,7 @@ int main(int argc, char* argv[]) {
 		spotter.initialize(PocketSphinxKWS::parseConfig(argc, argv), KEYWORD_FILE);
 
 		// Initialize main logic.
-		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, 12);
+		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, SERVO_PIN);
 		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;

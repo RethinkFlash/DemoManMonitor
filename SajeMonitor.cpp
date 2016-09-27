@@ -28,7 +28,8 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 
 SajeMonitor::~SajeMonitor()
 {
-    softPwmCreate(_servoPin, 0, 50);
+    cout << "Setting up PWM channel" << endl;
+    pinMode(_servoPin, PWM_OUTPUT);
 }
 
 void SajeMonitor::update() {
@@ -63,11 +64,13 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     6.5 is good for mid
     11.5 is good for max
     *****/
-    softPwmWrite(_servoPin, 6.5);
+    pwmWrite(_servoPin, 6.5);
     delay(2000);
-    softPwmWrite(_servoPin, 2);
+    pwmWrite(_servoPin, 2);
     delay(1000);
-    softPwmWrite(_servoPin, 0);
+    pwmWrite(_servoPin, 0);
+
+    cout << "done with servo" << endl;
 
 	// Stop audio recording while the alarm is raised.
 	_audioSource->pause();
