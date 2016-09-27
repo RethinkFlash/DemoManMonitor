@@ -51,6 +51,10 @@ void SajeMonitor::update() {
 
 
 void SajeMonitor::raiseAlarm(const std::string& keyword) {
+
+    // Stop audio recording while the alarm is raised.
+	_audioSource->pause();
+
     /*****
     put in code to set pwm for servo
     from the python test, these pwm values where good
@@ -66,20 +70,19 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 
     cout << "done with servo" << endl;
 
-	// Stop audio recording while the alarm is raised.
-	_audioSource->pause();
+
 	// Play audio and print the ticket at the same time.
 	// Since the Pi only has one core and timing is somewhat
 	// critical (for smooth audio playback), a tight loop to
 	// update audio and ticket printing state will be executed.
-	_audioSink->resume();
-	_audioSink->playAsync(*_alarm);
-	bool playing = true;
-	while (playing) {
-		playing = _audioSink->asyncUpdate();
-	}
+	// _audioSink->resume();
+	// _audioSink->playAsync(*_alarm);
+	// bool playing = true;
+	// while (playing) {
+		// playing = _audioSink->asyncUpdate();
+	// }
 	// Stop audio playback.
-	_audioSink->pause();
+	// _audioSink->pause();
 	// Enable recording again.
 	_audioSource->resume();
 }
