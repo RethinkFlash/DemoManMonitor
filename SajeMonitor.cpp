@@ -24,10 +24,10 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 	_buffer(bufferSize),
     _servoPin(servoPwm)
 {
-    cout << "Setting up PWM channel for pin" << _servoPin << endl;
-    pinMode(_servoPin, OUTPUT);
-    digitalWrite(_servoPin, LOW);
-    softPwmCreate(_servoPin, 0, 200);
+    // cout << "Setting up PWM channel for pin" << _servoPin << endl;
+    // pinMode(_servoPin, OUTPUT);
+    // digitalWrite(_servoPin, LOW);
+    // softPwmCreate(_servoPin, 0, 200);
 }
 
 SajeMonitor::~SajeMonitor()
@@ -65,13 +65,13 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     11.5 is good for max
     *****/
 
-    softPwmWrite(_servoPin, 180);
+    // softPwmWrite(_servoPin, 180);
     // delay(2000);
     // pwmWrite(_servoPin, 2);
     // delay(1000);
     // pwmWrite(_servoPin, 0);
 
-    cout << "done with servo" << endl;
+    // cout << "done with servo" << endl;
 
 
 	// Play audio and print the ticket at the same time.

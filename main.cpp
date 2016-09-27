@@ -31,7 +31,7 @@ using namespace std;
 
 // #define ARDUINO_PORT	"/dev/ttyUSB0"
 // #define BAUD_RATE       9600
-#define SERVO_PIN 		17
+#define SERVO_PIN 		0
 
 bool shouldRun = true;
 int wiringPiSetupInt;
@@ -45,7 +45,12 @@ int main(int argc, char* argv[]) {
 		signal(SIGINT, [](int param){ shouldRun = false; });
 
 		// Initialize wiringPi library.
-		wiringPiSetupInt = wiringPiSetupGpio() ;
+		wiringPiSetupInt = wiringPiSetup();
+		pinMode(SERVO_PIN, OUTPUT);
+		digitalWrite(SERVO_PIN, LOW);
+
+		softPwmCreate(SERVO_PIN, 0, 200);
+		softPwmWrite(SERVO_PIN, 180);
 
 		// Load alarm raw audio.
 		ifstream input(ALARM_FILE, ios::in | ios::binary);
