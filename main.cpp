@@ -32,6 +32,7 @@ using namespace std;
 // #define ARDUINO_PORT	"/dev/ttyUSB0"
 // #define BAUD_RATE       9600
 #define SERVO_PIN 		0
+#define PWM_PIN 		1
 
 bool shouldRun = true;
 int wiringPiSetupInt;
@@ -47,11 +48,27 @@ int main(int argc, char* argv[]) {
 		// Initialize wiringPi library.
 		if (wiringPiSetup () == -1)
 			exit (1) ;
-		pinMode(SERVO_PIN, OUTPUT);
-		digitalWrite(SERVO_PIN, LOW);
 
-		softPwmCreate(SERVO_PIN, 0, 200);
-		softPwmWrite(SERVO_PIN, 180);
+		pinMode(1, PWM_OUTPUT);
+		int bright ;
+		for (;;)
+		{
+			for (bright = 0 ; bright < 1024 ; ++bright)
+			{
+				pwmWrite (1, bright) ;
+				delay (1) ;
+			}
+
+			for (bright = 1023 ; bright >= 0 ; --bright)
+			{
+				pwmWrite (1, bright) ;
+				delay (1) ;
+			}
+		}
+		// digitalWrite(SERVO_PIN, LOW);
+		//
+		// softPwmCreate(SERVO_PIN, 0, 200);
+		// softPwmWrite(SERVO_PIN, 180);
 
 		cout << "Servo done" << endl;
 
