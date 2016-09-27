@@ -26,7 +26,6 @@ public:
 			   	   int servoPin);
 	~SajeMonitor();
 	void update();
-	void setQuietMode(bool quietMode);
     int pwmWire;
 
 private:
@@ -37,7 +36,6 @@ private:
 	KeywordSpotter* _spotter;
 	std::vector<uint8_t>* _alarm;
 	std::vector<uint8_t> _buffer;
-	bool _quietMode;
 	int _arduinoSerial;
     int _servoPin;
 };

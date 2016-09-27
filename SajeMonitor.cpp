@@ -22,7 +22,6 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
-	_quietMode(false),
     _servoPin(servoPwm)
 {}
 
@@ -52,11 +51,6 @@ void SajeMonitor::update() {
 
 
 void SajeMonitor::raiseAlarm(const std::string& keyword) {
-	// Don't play audio or print ticket while in quiet mode.
-	if (_quietMode) {
-		return;
-	}
-
     /*****
     put in code to set pwm for servo
     from the python test, these pwm values where good
@@ -88,8 +82,4 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
 	_audioSink->pause();
 	// Enable recording again.
 	_audioSource->resume();
-}
-
-void SajeMonitor::setQuietMode(bool quietMode) {
-	_quietMode = quietMode;
 }

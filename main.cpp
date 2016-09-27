@@ -31,22 +31,10 @@ using namespace std;
 
 // #define ARDUINO_PORT	"/dev/ttyUSB0"
 // #define BAUD_RATE       9600
-#define QUIET_PIN       0
 #define SERVO_PIN 		17
 
 bool shouldRun = true;
-int arduinoSerial;
 int wiringPiSetupInt;
-
-void setQuietMode(SajeMonitor& monitor, bool quietMode) {
-	monitor.setQuietMode(quietMode);
-	if (quietMode) {
-		cout << "Quiet mode enabled." << endl;
-	}
-	else {
-		cout << "Quiet mode disabled." << endl;
-	}
-}
 
 int main(int argc, char* argv[]) {
 	try {
@@ -56,20 +44,8 @@ int main(int argc, char* argv[]) {
 		// Signal handler to catch ctrl-c in the main loop and shut down gracefully (i.e. call destructors).
 		signal(SIGINT, [](int param){ shouldRun = false; });
 
-		// Initialize wiringPi library and quiet switch input.
+		// Initialize wiringPi library.
 		wiringPiSetupInt = wiringPiSetupGpio() ;
-		pinMode(QUIET_PIN, INPUT);
-		bool quietSwitch = (digitalRead(QUIET_PIN) == HIGH);
-
-        // if((arduinoSerial = serialOpen(ARDUINO_PORT, BAUD_RATE)) < 0 ) {
-        //     cerr << "ERROR: Arduino Serial cannot be opened" << endl;
-        //     if ( wiringPiSetupInt < 0 ) {
-        //         cerr << "WiringPiSetup problem" << endl;
-        //     }
-    	// 	return 1;
-        // } else {
-        //     cout << "Arduino Serial successful!" << endl;
-        // }
 
 		// Load alarm raw audio.
 		ifstream input(ALARM_FILE, ios::in | ios::binary);
@@ -91,17 +67,11 @@ int main(int argc, char* argv[]) {
 
 		// Initialize main logic.
 		SajeMonitor monitor(8000, &source, &sink, &spotter, &alarm, SERVO_PIN);
-		setQuietMode(monitor, quietSwitch);
 
 		cout << "Listening... (press Ctrl-C to stop)" << endl;
 
 		while (shouldRun) {
 			// Check quite mode switch and update state.
-			bool newQuietSwitch = (digitalRead(QUIET_PIN) == HIGH);
-			if (newQuietSwitch != quietSwitch) {
-				quietSwitch = newQuietSwitch;
-				setQuietMode(monitor, quietSwitch);
-			}
 			// Update main logic state.
 			monitor.update();
 		}
