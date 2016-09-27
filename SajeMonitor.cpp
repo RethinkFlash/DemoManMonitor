@@ -24,7 +24,7 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 	_buffer(bufferSize),
     _servoPin(servoPwm)
 {
-    cout << "Setting up PWM channel" << endl;
+    cout << "Setting up PWM channel for pin" << _servoPin << endl;
     pinMode(_servoPin, PWM_OUTPUT);
 }
 
@@ -59,10 +59,10 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     11.5 is good for max
     *****/
     pwmWrite(_servoPin, 6.5);
-    delay(2000);
-    pwmWrite(_servoPin, 2);
-    delay(1000);
-    pwmWrite(_servoPin, 0);
+    // delay(2000);
+    // pwmWrite(_servoPin, 2);
+    // delay(1000);
+    // pwmWrite(_servoPin, 0);
 
     cout << "done with servo" << endl;
 
