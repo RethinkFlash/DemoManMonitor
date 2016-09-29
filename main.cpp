@@ -14,6 +14,7 @@
 #include <vector>
 
 #include <wiringPi.h>
+#include <osftPwm.h>
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
@@ -48,13 +49,8 @@ int main(int argc, char* argv[]) {
 		if (wiringPiSetup () == -1)
 			exit (1) ;
 
-		Setup(0);
-
-		pinMode(1, PWM_OUTPUT);
-		pwmSetMode(PWM_MODE_MS);
-		pwmSetClock(384);
-		pwmSetRange(1000);
-		pwmWrite(1,75);
+		softPwmCreate(0, 0,100);
+		softPwmWrite(0, 20);
 		cout << "Servo written" << endl;
 		delay (3000);
 		// digitalWrite(SERVO_PIN, LOW);
