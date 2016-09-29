@@ -14,7 +14,6 @@
 #include <vector>
 
 #include <wiringPi.h>
-#include "softServo.h"
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
@@ -48,10 +47,16 @@ int main(int argc, char* argv[]) {
 		// Initialize wiringPi library.
 		if (wiringPiSetup () == -1)
 			exit (1) ;
-		softServoSetup(0);
-		softServoWrite(0, 500);
+
+		Setup(0);
+
 		pinMode(1, PWM_OUTPUT);
-		delay (2000);
+		pwmSetMode(PWM_MODE_MS);
+		pwmSetClock(384);
+		pwmSetRange(1000);
+		pwmWrite(1,75);
+		cout << "Servo written" << endl;
+		delay (3000);
 		// digitalWrite(SERVO_PIN, LOW);
 		//
 		// softPwmCreate(SERVO_PIN, 0, 200);
