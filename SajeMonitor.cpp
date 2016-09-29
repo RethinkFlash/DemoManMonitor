@@ -19,20 +19,20 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSink* audioSink,
 							   KeywordSpotter* spotter,
 							   std::vector<uint8_t>* alarm,
-                               int servoPwm):
+                               int servoPin):
 	_audioSource(audioSource),
 	_audioSink(audioSink),
 	_spotter(spotter),
 	_alarm(alarm),
 	_buffer(bufferSize),
-    _servoPin(servoPwm)
+    _servoPin(servoPin)
 {
     // Initialize wiringPi library.
     if (wiringPiSetup () == -1)
         exit (1) ;
 
 
-    pinMode(servoPwm, PWM_OUTPUT);
+    pinMode(_servoPin, PWM_OUTPUT);
     pwmSetMode(PWM_MODE_MS);
     pwmSetClock(384);
     pwmSetRange(1000);
@@ -73,9 +73,9 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     11.5 is good for max
     *****/
 
-    pwmWrite(_servoPwm, MAX_VAL);
+    pwmWrite(_servoPin, MAX_VAL);
     delay(2000);
-    pwmWrite(_servoPwm, MIN_VAL);
+    pwmWrite(_servoPin, MIN_VAL);
     delay(1000);
     pwmWrite(_servoPin, 0);
 

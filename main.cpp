@@ -12,7 +12,7 @@
 #include <iostream>
 #include <iterator>
 #include <vector>
-// #include <wiringPi.h>
+#include <wiringPi.h>
 
 #include "AlsaError.h"
 #include "AlsaSink.h"
