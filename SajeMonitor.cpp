@@ -7,9 +7,12 @@
 #include <iostream>
 #include <unistd.h>
 #include <wiringPi.h>
-#include <softPwm.h>
 
 using namespace std;
+
+int DELAY_MS = 750;
+int MIN_VAL = 20;
+int MAX_VAL = 125;
 
 SajeMonitor::SajeMonitor(size_t bufferSize,
 							   AudioSource* audioSource,
@@ -24,10 +27,15 @@ SajeMonitor::SajeMonitor(size_t bufferSize,
 	_buffer(bufferSize),
     _servoPin(servoPwm)
 {
-    // cout << "Setting up PWM channel for pin" << _servoPin << endl;
-    // pinMode(_servoPin, OUTPUT);
-    // digitalWrite(_servoPin, LOW);
-    // softPwmCreate(_servoPin, 0, 200);
+    // Initialize wiringPi library.
+    if (wiringPiSetup () == -1)
+        exit (1) ;
+
+
+    pinMode(servoPwm, PWM_OUTPUT);
+    pwmSetMode(PWM_MODE_MS);
+    pwmSetClock(384);
+    pwmSetRange(1000);
 }
 
 SajeMonitor::~SajeMonitor()
@@ -65,13 +73,13 @@ void SajeMonitor::raiseAlarm(const std::string& keyword) {
     11.5 is good for max
     *****/
 
-    // softPwmWrite(_servoPin, 180);
-    // delay(2000);
-    // pwmWrite(_servoPin, 2);
-    // delay(1000);
-    // pwmWrite(_servoPin, 0);
+    pwmWrite(_servoPwm, MAX_VAL);
+    delay(2000);
+    pwmWrite(_servoPwm, MIN_VAL);
+    delay(1000);
+    pwmWrite(_servoPin, 0);
 
-    // cout << "done with servo" << endl;
+    cout << "done with servo" << endl;
 
 
 	// Play audio and print the ticket at the same time.
