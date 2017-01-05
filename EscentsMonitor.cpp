@@ -72,4 +72,39 @@ void EscentsMonitor::raiseAlarm(const std::string& keyword) {
 
     /*****
     put in code to set pwm for servo
-something?
+    from the python test, these pwm values where good
+    2 is good for min
+    6.5 is good for mid
+    11.5 is good for max
+    *****/
+
+    // turn off the led first
+    digitalWrite(_readyLedPin, LOW);
+
+    pwmWrite(_servoPin, MAX_VAL);
+    delay(2000);
+    pwmWrite(_servoPin, MIN_VAL);
+    delay(1000);
+    pwmWrite(_servoPin, 0);
+
+    // turn led back on
+    digitalWrite(_readyLedPin, HIGH);
+
+    cout << "done with servo" << endl;
+
+
+  // Play audio and print the ticket at the same time.
+  // Since the Pi only has one core and timing is somewhat
+  // critical (for smooth audio playback), a tight loop to
+  // update audio and ticket printing state will be executed.
+  // _audioSink->resume();
+  // _audioSink->playAsync(*_alarm);
+  // bool playing = true;
+  // while (playing) {
+    // playing = _audioSink->asyncUpdate();
+  // }
+  // Stop audio playback.
+  // _audioSink->pause();
+  // Enable recording again.
+  _audioSource->resume();
+}
