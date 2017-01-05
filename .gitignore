@@ -18,3 +18,4 @@ testrunner
 AlsaSourceRecorder
 AlsaSinkPlayer
 AdafruitThermalTest
+trainingfiles/*
